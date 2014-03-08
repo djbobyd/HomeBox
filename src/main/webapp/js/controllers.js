@@ -2,20 +2,10 @@
 
 /* Controllers */
 
-var phonecatControllers = angular.module('phonecatControllers', []);
+angular.module('myApp.controllers', []).
+  controller('MyCtrl1', [function() {
 
-phonecatControllers.controller('PhoneListCtrl', ['$scope', 'Phone',
-  function($scope, Phone) {
-    $scope.phones=Phone.query();
-    $scope.orderProp = 'age';
-  }]);
+  }])
+  .controller('MyCtrl2', [function() {
 
-phonecatControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
-  function($scope, $routeParams, Phone) {
-      $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone){
-        $scope.mainImageUrl = phone.images[0];  
-      });
-      $scope.setImage = function(imageUrl){
-          $scope.mainImageUrl = imageUrl;
-      }
   }]);
