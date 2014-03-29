@@ -11,10 +11,10 @@ html{
 }
 
 body{
-	background:url('../img/bg_head.jpg') repeat-x top center, url('../img/bg_vert.jpg') repeat-x;
-	min-height:500px;
+	background:url('../img/bg_head.jpg') repeat-x top center , url('../img/bg_vert.jpg') repeat-x;
+        background-color: transparent !important;
+/*	min-height:500px;*/
 	font:14px/1.3 'Segoe UI',Arial, sans-serif;
-	color:#888;
 	padding:10px;
 }
 
@@ -48,12 +48,6 @@ header{
 	position:relative;
 }
 
-nav{
-	display: block;
-	margin: 70px auto 0;
-	text-align: center;
-	width: 600px;
-}
 
 footer{
 	color: #BBBBBB;
@@ -62,28 +56,4 @@ footer{
 	padding: 60px 20px 0;
 	text-align: center;
 	display:block;
-}
-
-footer b{
-	color: #888888;
-	display: block;
-	font-size: 10px;
-	font-weight: normal;
-}
-
-a, a:visited {
-	text-decoration:none;
-	outline:none;
-	color:#54a6de;
-}
-
-a:hover{
-	text-decoration:underline;
-}
-
-.context{
-    display: block;
-    margin: 10px auto 0;
-    text-align: justify;
-    width: 600px;
 }

@@ -8,6 +8,6 @@
 angular.module('myApp.services', ['ngResource']).value('version', '0.1').
         factory('myJersey', ['$resource',function($resource){
           return $resource('webapi/myresource',{},{
-              query:{method:'GET',isArray:false}
+              query:{method:'GET',params:{id:1} ,isArray:true}
           });
   }]);

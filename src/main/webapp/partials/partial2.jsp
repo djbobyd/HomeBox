@@ -2,5 +2,8 @@
 <p>
   Showing of 'interpolate' filter:
   {{ 'Current version is v%VERSION%.' | interpolate }}
-  {{jersey}}
+<ul >
+    <li>Name: {{jersey[0].name}}</li>
+    <li>Description: {{jersey[0].description}}</li>
+</ul>
 </p>
