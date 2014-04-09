@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+ 
+ <context:annotation-config />
+ 
+ <bean id="dataSource" 
+      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+      <property name="url" value="jdbc:mysql://nas:3306/homebox"/>
+      <property name="username" value="homebox"/>
+      <property name="password" value="H0meB0x"/>
+ </bean>
+ <!-- Spring transaction manager -->
+<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" p:entityManagerFactory-ref="entityManagerFactory" />
+
+ <!-- JPA Hibernate shared entity manager -->
+<bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean" p:entityManagerFactory-ref="entityManagerFactory"
+
+<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+
+    <property name="dataSource" ref="dataSource" />
+    <property name="persistenceUnitName" value="com.adraood_HomeBox_PU" />
+    <property name="jpaDialect" ref="jpaDialect" />
+    <property name="jpaVendorAdapter">
+        <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
+        </bean>
+    </property>
+    <property name="loadTimeWeaver">
+        <bean class="org.springframework.instrument.classloading.SimpleLoadTimeWeaver" />
+    </property>
+</bean>
+<tx:annotation-driven transaction-manager="transactionManager" />
+
+<!--
+		INIT REST COMPONENTS 
+	 -->
+	
+	<context:component-scan base-package="com.adraood.homebox.rest.resources" />
+	
+	<bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
+	<bean id="userDao" class="com.adraood.homebox.dao.user.JpaUserDao">
+	</bean>
+        
+	<!-- 
+		SPRING SECURITY SETUP
+	-->
+	
+	<bean id="passwordEncoder" class="com.adraood.homebox.security.SaltedSHA256PasswordEncoder">
+		<constructor-arg value="secret" />
+	</bean>
+
+
+	<security:authentication-manager id="authenticationManager">
+		<security:authentication-provider user-service-ref="userDao">
+			<security:password-encoder ref="passwordEncoder"></security:password-encoder>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<security:http
+			realm="Protected API"
+			use-expressions="true"
+			auto-config="false"
+			create-session="stateless"
+			entry-point-ref="unauthorizedEntryPoint"
+			authentication-manager-ref="authenticationManager">
+		<security:custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER" />
+		<security:intercept-url pattern="/rest/user/authenticate" access="permitAll" />
+	</security:http>
+
+	<bean id="unauthorizedEntryPoint" class="com.adraood.homebox.rest.UnauthorizedEntryPoint" />
+
+	<bean class="com.adraood.homebox.rest.AuthenticationTokenProcessingFilter" id="authenticationTokenProcessingFilter">
+		<constructor-arg ref="userDao" />
+	</bean>
+
+</beans>
